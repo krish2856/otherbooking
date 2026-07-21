@@ -217,10 +217,10 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('gst').value = b.gst;
         document.getElementById('net_amount').value = b.net_amount;
         document.getElementById('paid_amount').value = b.paid_amount;
-        document.getElementById('due_amount').value = b.due_amount;
+        
         document.getElementById('payment_mode').value = b.payment_mode;
-        document.getElementById('pnr').value = b.pnr || '';
-        document.getElementById('bus_number').value = b.bus_number || '';
+        
+        
         document.getElementById('remarks').value = b.remarks || '';
         document.getElementById('booking_status').value = b.booking_status;
 
@@ -513,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="print-ticket">
             <div class="pt-header">
                 <div>
-                    <div class="pt-title"><i class="bi bi-bus-front-fill"></i> BusReservePro Travels</div>
+                    <div class="pt-title"><i class="bi bi-bus-front-fill"></i>OtherBooking Pro</div>
                     <div class="pt-sub">E-Ticket / Booking Confirmation</div>
                 </div>
                 <div class="text-end">
@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div><span class="label">Seat:</span> <span class="value">${escapeHtml(b.seat_number)} (${escapeHtml(b.seat_type || '-')})</span></div>
                 <div><span class="label">Pickup Point:</span> <span class="value">${escapeHtml(b.pickup_point || '-')}</span></div>
                 <div><span class="label">Drop Point:</span> <span class="value">${escapeHtml(b.drop_point || '-')}</span></div>
-                <div><span class="label">PNR:</span> <span class="value">${escapeHtml(b.pnr || '-')}</span></div>
+                
                 <div><span class="label">Payment Mode:</span> <span class="value">${escapeHtml(b.payment_mode)}</span></div>
                 <div><span class="label">Status:</span> <span class="value">${escapeHtml(b.booking_status)}</span></div>
                 <div><span class="label">Remarks:</span> <span class="value">${escapeHtml(b.remarks || '-')}</span></div>
