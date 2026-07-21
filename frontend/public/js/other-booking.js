@@ -9,6 +9,11 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // -------------------------------------------------
+    // API Configuration
+    // -------------------------------------------------
+    const API_BASE_URL = 'https://otherbooking.onrender.com';
+
+    // -------------------------------------------------
     // Element references
     // -------------------------------------------------
     const form = document.getElementById('bookingForm');
@@ -140,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // -------------------------------------------------
     async function refreshNextTicket() {
         try {
-            const res = await fetch('/api/other-bookings/next-ticket');
+            const res = await fetch(`${API_BASE_URL}/api/other-bookings/next-ticket`);
             const json = await res.json();
             if (json.success) {
                 ticketNoField.value = json.ticket_no;
@@ -239,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             btnSave.disabled = true;
-            const res = await fetch('/api/other-bookings', {
+            const res = await fetch(`${API_BASE_URL}/api/other-bookings`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -278,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = collectFormData();
 
         try {
-            const res = await fetch(`/api/other-bookings/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -311,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!confirm('Are you sure you want to delete this booking? This action cannot be undone.')) return;
 
         try {
-            const res = await fetch(`/api/other-bookings/${id}`, { method: 'DELETE' });
+            const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`, { method: 'DELETE' });
             const json = await res.json();
 
             if (!res.ok || !json.success) {
@@ -339,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // -------------------------------------------------
     async function loadAllBookings() {
         try {
-            const res = await fetch('/api/other-bookings');
+            const res = await fetch(`${API_BASE_URL}/api/other-bookings`);
             const json = await res.json();
             if (json.success) {
                 renderTable(json.data);
@@ -411,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target.closest('.btn-delete-row')) {
             if (!confirm('Are you sure you want to delete this booking?')) return;
             try {
-                const res = await fetch(`/api/other-bookings/${id}`, { method: 'DELETE' });
+                const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`, { method: 'DELETE' });
                 const json = await res.json();
                 if (!res.ok || !json.success) {
                     showAlert(json.message || 'Failed to delete booking.', 'danger');
@@ -427,7 +432,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (e.target.closest('.btn-print-row')) {
-            const res = await fetch(`/api/other-bookings/${id}`);
+            const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`);
             const json = await res.json();
             if (json.success) {
                 printTicket(json.data);
@@ -437,7 +442,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function loadBookingIntoForm(id) {
         try {
-            const res = await fetch(`/api/other-bookings/${id}`);
+            const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`);
             const json = await res.json();
             if (json.success) {
                 populateForm(json.data);
@@ -470,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const res = await fetch(`/api/other-bookings/search?field=${encodeURIComponent(field)}&keyword=${encodeURIComponent(keyword)}`);
+            const res = await fetch(`${API_BASE_URL}/api/other-bookings/search?field=${encodeURIComponent(field)}&keyword=${encodeURIComponent(keyword)}`);
             const json = await res.json();
             if (json.success) {
                 renderTable(json.data);

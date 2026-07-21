@@ -13,6 +13,7 @@ const path = require('path'); // A tool to help us easily locate folders on our 
 const bodyParser = require('body-parser'); // Helps us read data sent from forms
 const methodOverride = require('method-override'); // Lets us use advanced HTTP methods like PUT and DELETE
 const morgan = require('morgan'); // A tool that logs all server activity in the console for easy debugging
+const cors = require('cors'); // Allows our frontend to talk to the backend from a different URL (like Netlify or localhost)
 
 // We bring in the code that tells the server what to do when specific URLs are visited
 const otherBookingRoutes = require('./routes/otherBookingRoutes');
@@ -32,6 +33,7 @@ app.set('views', path.join(__dirname, '../frontend/views'));
 // ---------------------------------------------------
 // 2. Middleware Configuration
 // ---------------------------------------------------
+app.use(cors()); // Turns on CORS so the frontend doesn't get blocked
 app.use(morgan('dev')); // Turns on activity logging
 app.use(bodyParser.json()); // Allows the server to understand JSON data
 app.use(bodyParser.urlencoded({ extended: true })); // Allows the server to understand standard form submissions
