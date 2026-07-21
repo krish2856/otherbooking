@@ -11,8 +11,7 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'bus_reservation_db',
     port: process.env.DB_PORT || 5432,
-    // Note: Render and Supabase often require SSL. Add it if your environment needs it:
-    // ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false }
 });
 
 // Test connection on startup
