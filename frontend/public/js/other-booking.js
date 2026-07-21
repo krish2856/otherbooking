@@ -151,9 +151,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (json.success) {
                 ticketNoField.value = json.ticket_no;
                 nextTicketBadge.textContent = json.ticket_no;
+            } else {
+                nextTicketBadge.textContent = "Error";
+                showAlert("Failed to load ticket number: " + (json.message || json.errorName || ''), "danger");
             }
         } catch (err) {
             console.error('Failed to fetch next ticket number', err);
+            nextTicketBadge.textContent = "Offline";
+            showAlert("Network Error: Could not connect to API for ticket generation.", "danger");
         }
     }
 
@@ -350,9 +355,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const json = await res.json();
             if (json.success) {
                 renderTable(json.data);
+            } else {
+                tableBody.innerHTML = `<tr><td colspan="11" class="text-center text-danger py-4">Error: ${json.message || json.errorName || 'Failed to load'}</td></tr>`;
             }
         } catch (err) {
             console.error('Failed to load bookings', err);
+            tableBody.innerHTML = `<tr><td colspan="11" class="text-center text-danger py-4">Network Error: Could not connect to API.</td></tr>`;
         }
     }
 
