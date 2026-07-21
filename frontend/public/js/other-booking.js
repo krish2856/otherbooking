@@ -356,11 +356,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (json.success) {
                 renderTable(json.data);
             } else {
-                tableBody.innerHTML = `<tr><td colspan="11" class="text-center text-danger py-4">Error: ${json.message || json.errorName || 'Failed to load'}</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">Error: ${json.message || json.errorName || 'Failed to load'}</td></tr>`;
             }
         } catch (err) {
             console.error('Failed to load bookings', err);
-            tableBody.innerHTML = `<tr><td colspan="11" class="text-center text-danger py-4">Network Error: Could not connect to API.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">Network Error: Could not connect to API.</td></tr>`;
         }
     }
 
@@ -373,32 +373,30 @@ document.addEventListener('DOMContentLoaded', function () {
         if (rows.length === 0) {
             tableBody.innerHTML = `
                 <tr id="emptyRow">
-                    <td colspan="11" class="text-center text-muted py-4">
+                    <td colspan="7" class="text-center text-muted py-4">
                         <i class="bi bi-inbox fs-3 d-block mb-2"></i>No bookings found.
                     </td>
                 </tr>`;
             return;
         }
 
-        tableBody.innerHTML = rows.map(b => `
+        tableBody.innerHTML = rows.map(b => {
+            const formattedDate = b.journey_date ? String(b.journey_date).split('T')[0] : '';
+            return `
             <tr data-id="${b.id}">
                 <td class="fw-semibold text-accent">${escapeHtml(b.ticket_no)}</td>
-                <td>${escapeHtml(b.journey_date)}</td>
+                <td>${escapeHtml(formattedDate)}</td>
                 <td>${escapeHtml(b.passenger_name)}</td>
                 <td>${escapeHtml(b.passenger_mobile)}</td>
-                <td>${escapeHtml(b.from_place)}</td>
-                <td>${escapeHtml(b.to_place)}</td>
-                <td>${escapeHtml(b.seat_number)}</td>
                 <td>${escapeHtml(b.operator)}</td>
                 <td>₹${Number(b.fare).toFixed(2)}</td>
-                <td><span class="status-badge status-${b.booking_status.toLowerCase()}">${b.booking_status}</span></td>
                 <td class="text-center">
                     <button class="btn btn-sm btn-icon-table text-primary btn-edit-row" title="Edit"><i class="bi bi-pencil-square"></i></button>
                     <button class="btn btn-sm btn-icon-table text-danger btn-delete-row" title="Delete"><i class="bi bi-trash"></i></button>
                     <button class="btn btn-sm btn-icon-table text-success btn-print-row" title="Print"><i class="bi bi-printer"></i></button>
                 </td>
             </tr>
-        `).join('');
+        `}).join('');
     }
 
     function escapeHtml(str) {
