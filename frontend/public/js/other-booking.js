@@ -476,6 +476,189 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // -------------------------------------------------
+    // TICKET PRINT & PDF GENERATOR
+    // -------------------------------------------------
+    function generateTicketHtml(b) {
+        const formatDate = (d) => d ? String(d).split('T')[0] : '-';
+        return `
+            <div class="ticket-card">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                    <div>
+                        <div class="ticket-header-title"><i class="bi bi-bus-front me-2"></i>BUS RESERVATION TICKET</div>
+                        <small class="text-muted">Official Passenger Travel Receipt</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-primary fs-6 px-3 py-2">Ticket: ${escapeHtml(b.ticket_no)}</span>
+                        <div class="text-muted small mt-1">Booked On: ${formatDate(b.booking_date)}</div>
+                    </div>
+                </div>
+
+                <!-- Route Banner -->
+                <div class="ticket-route-banner d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <div class="small opacity-75">ORIGIN</div>
+                        <div class="fs-4 fw-bold">${escapeHtml(b.from_place)}</div>
+                    </div>
+                    <div class="text-center px-3">
+                        <i class="bi bi-arrow-right fs-3"></i>
+                        <div class="small fw-semibold mt-1">${formatDate(b.journey_date)} ${b.journey_time ? '| ' + escapeHtml(b.journey_time) : ''}</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="small opacity-75">DESTINATION</div>
+                        <div class="fs-4 fw-bold">${escapeHtml(b.to_place)}</div>
+                    </div>
+                </div>
+
+                <!-- Details Grid -->
+                <div class="row g-3 mb-4">
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">Passenger Name</span>
+                            <span class="ticket-val">${escapeHtml(b.passenger_name)}</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">Mobile Number</span>
+                            <span class="ticket-val">${escapeHtml(b.passenger_mobile)}</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">Gender / Age</span>
+                            <span class="ticket-val">${escapeHtml(b.passenger_gender || 'Male')} / ${b.passenger_age || '-'}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">Seat Number</span>
+                            <span class="ticket-val text-primary fw-bold">${escapeHtml(b.seat_number)} (${escapeHtml(b.seat_type || 'Seater')})</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">Travel Operator</span>
+                            <span class="ticket-val">${escapeHtml(b.operator)}</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">Coach / Bus No</span>
+                            <span class="ticket-val">${escapeHtml(b.coach || '-')} ${b.bus_number ? '/ ' + escapeHtml(b.bus_number) : ''}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">Pickup Point</span>
+                            <span class="ticket-val">${escapeHtml(b.pickup_point || '-')}</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">Drop Point</span>
+                            <span class="ticket-val">${escapeHtml(b.drop_point || '-')}</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="ticket-field">
+                            <span class="ticket-label">PNR / Status</span>
+                            <span class="ticket-val">${escapeHtml(b.pnr || '-')} / <span class="text-success fw-bold">${escapeHtml(b.booking_status || 'Confirmed')}</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fare Summary -->
+                <div class="ticket-fare-summary mb-4">
+                    <div class="row text-center align-items-center">
+                        <div class="col">
+                            <span class="ticket-label">Base Fare</span>
+                            <span class="fw-bold">₹${Number(b.fare).toFixed(2)}</span>
+                        </div>
+                        <div class="col">
+                            <span class="ticket-label">Discount</span>
+                            <span class="fw-bold text-success">-₹${Number(b.discount || 0).toFixed(2)}</span>
+                        </div>
+                        <div class="col">
+                            <span class="ticket-label">GST</span>
+                            <span class="fw-bold">+₹${Number(b.gst || 0).toFixed(2)}</span>
+                        </div>
+                        <div class="col">
+                            <span class="ticket-label">Paid (${escapeHtml(b.payment_mode || 'Cash')})</span>
+                            <span class="fw-bold text-success">₹${Number(b.paid_amount || 0).toFixed(2)}</span>
+                        </div>
+                        <div class="col">
+                            <span class="ticket-label">Due Amount</span>
+                            <span class="fw-bold text-danger">₹${Number(b.due_amount || 0).toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Terms -->
+                <div class="text-center text-muted small pt-2 border-top">
+                    <div><i class="bi bi-info-circle me-1"></i>Please report at pickup point 15 minutes prior to departure. Carry a valid photo ID.</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function printCurrentTicket(b) {
+        if (!b) {
+            showAlert('Please select or create a booking to print.', 'warning');
+            return;
+        }
+        printArea.innerHTML = generateTicketHtml(b);
+        printArea.classList.remove('d-none');
+        window.print();
+    }
+
+    btnPrint.addEventListener('click', function () {
+        if (!currentBookingData) {
+            const formData = collectFormData();
+            if (!formData.passenger_name || !formData.seat_number) {
+                showAlert('Please fill form or select a booking from the table to print.', 'warning');
+                return;
+            }
+            formData.ticket_no = ticketNoField.value || 'OB-Draft';
+            printCurrentTicket(formData);
+        } else {
+            printCurrentTicket(currentBookingData);
+        }
+    });
+
+    btnPdf.addEventListener('click', async function () {
+        const b = currentBookingData || (form.checkValidity() ? { ...collectFormData(), ticket_no: ticketNoField.value || 'OB-Draft' } : null);
+        if (!b) {
+            showAlert('Please select or fill a booking to download PDF.', 'warning');
+            return;
+        }
+
+        try {
+            showAlert('Generating Ticket PDF...', 'info');
+            printArea.innerHTML = generateTicketHtml(b);
+            printArea.classList.remove('d-none');
+
+            const ticketCard = printArea.querySelector('.ticket-card');
+            const canvas = await html2canvas(ticketCard, { scale: 2 });
+            const imgData = canvas.toDataURL('image/png');
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'pt', [canvas.width / 2, canvas.height / 2]);
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+            pdf.save(`Ticket_${b.ticket_no || 'Booking'}.pdf`);
+
+            showAlert('Ticket PDF downloaded successfully!', 'success');
+        } catch (err) {
+            console.error(err);
+            showAlert('Failed to generate PDF.', 'danger');
+        } finally {
+            printArea.classList.add('d-none');
+        }
+    });
+
+    // -------------------------------------------------
     // INITIALIZATION
     // -------------------------------------------------
     async function init() {

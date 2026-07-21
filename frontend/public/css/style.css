@@ -143,3 +143,85 @@ body {
 .btn-icon-table:hover {
     background-color: #e2e8f0;
 }
+
+/* =====================================================
+   TICKET CARD & PRINT STYLING
+   ===================================================== */
+.ticket-card {
+    background: #ffffff;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 800px;
+    margin: 20px auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    color: #0f172a;
+}
+
+.ticket-header-title {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+}
+
+.ticket-route-banner {
+    background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #0284c7 100%);
+    color: #ffffff;
+    padding: 16px 20px;
+    border-radius: 8px;
+}
+
+.ticket-field {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px 12px;
+}
+
+.ticket-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ticket-val {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.ticket-fare-summary {
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+/* Print Specific Rules */
+@media print {
+    body {
+        background-color: #ffffff !important;
+    }
+    body > *:not(#printArea) {
+        display: none !important;
+    }
+    #printArea {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #printArea .ticket-card {
+        border: 2px solid #334155;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+}
