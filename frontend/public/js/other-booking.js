@@ -613,4 +613,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // -------------------------------------------------
     document.getElementById('booking_date').value = todayStr();
     recalcAmounts();
+    loadAllBookings();
+    refreshNextTicket();
 });

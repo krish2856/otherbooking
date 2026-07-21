@@ -1,14 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('partials/head') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Booking | Bus Reservation Management System</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<%- include('partials/navbar') %>
+<!-- ===================== TOP NAVBAR ===================== -->
+<nav class="top-navbar d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-icon d-lg-none" id="sidebarToggle" title="Toggle Menu">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+        <div class="brand d-flex align-items-center gap-2">
+            <div class="brand-icon">
+                <i class="bi bi-bus-front-fill"></i>
+            </div>
+            <div class="brand-text d-none d-sm-block">
+                <div class="brand-title">BusReserve<span class="text-accent">Pro</span></div>
+                <div class="brand-subtitle">Admin Panel</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <div class="navbar-search d-none d-md-flex align-items-center">
+            <i class="bi bi-search"></i>
+            <input type="text" class="form-control form-control-sm" placeholder="Quick search...">
+        </div>
+
+        <button class="btn btn-icon position-relative" title="Notifications">
+            <i class="bi bi-bell"></i>
+            <span class="notif-dot"></span>
+        </button>
+
+        <div class="dropdown">
+            <button class="btn btn-icon d-flex align-items-center gap-2 dropdown-toggle admin-btn" data-bs-toggle="dropdown">
+                <div class="avatar">A</div>
+                <span class="d-none d-md-inline fw-semibold">Admin</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                <li><a class="dropdown-item" href="placeholder.html?page=Profile"><i class="bi bi-person me-2"></i>Profile</a></li>
+                <li><a class="dropdown-item" href="placeholder.html?page=Settings"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="placeholder.html?page=Logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 <div class="app-layout">
-    <%- include('partials/sidebar') %>
+    <!-- ===================== LEFT SIDEBAR ===================== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-section-title">Main</div>
+        <ul class="sidebar-menu">
+            <li><a href="placeholder.html?page=Dashboard"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a></li>
+            <li><a href="placeholder.html?page=Bus%20Booking"><i class="bi bi-ticket-perforated"></i><span>Bus Booking</span></a></li>
+            <li class="active"><a href="index.html"><i class="bi bi-journal-plus"></i><span>Other Booking</span></a></li>
+            <li><a href="placeholder.html?page=Cancellation"><i class="bi bi-arrow-counterclockwise"></i><span>Cancellation</span></a></li>
+        </ul>
+
+        <div class="sidebar-section-title">Management</div>
+        <ul class="sidebar-menu">
+            <li><a href="placeholder.html?page=Bus%20Coach"><i class="bi bi-bus-front"></i><span>Bus / Coach</span></a></li>
+            <li><a href="placeholder.html?page=Routes"><i class="bi bi-signpost-split"></i><span>Routes</span></a></li>
+            <li><a href="placeholder.html?page=Operators"><i class="bi bi-building"></i><span>Operators</span></a></li>
+            <li><a href="placeholder.html?page=Passengers"><i class="bi bi-people"></i><span>Passengers</span></a></li>
+        </ul>
+
+        <div class="sidebar-section-title">Finance</div>
+        <ul class="sidebar-menu">
+            <li><a href="placeholder.html?page=Payments"><i class="bi bi-cash-coin"></i><span>Payments</span></a></li>
+            <li><a href="placeholder.html?page=Reports"><i class="bi bi-graph-up-arrow"></i><span>Reports</span></a></li>
+        </ul>
+
+        <div class="sidebar-section-title">System</div>
+        <ul class="sidebar-menu">
+            <li><a href="placeholder.html?page=Users"><i class="bi bi-people-fill"></i><span>Users</span></a></li>
+            <li><a href="placeholder.html?page=Settings"><i class="bi bi-gear"></i><span>Settings</span></a></li>
+        </ul>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
     <main class="main-content">
 
@@ -24,7 +107,7 @@
                 </nav>
             </div>
             <div class="d-flex gap-2">
-                <span class="badge-soft"><i class="bi bi-ticket-detailed me-1"></i>Next Ticket: <b id="nextTicketBadge"><%= nextTicketNo %></b></span>
+                <span class="badge-soft"><i class="bi bi-ticket-detailed me-1"></i>Next Ticket: <b id="nextTicketBadge">---</b></span>
             </div>
         </div>
 
@@ -239,7 +322,7 @@
         <div class="card app-card mb-4">
             <div class="card-header app-card-header d-flex align-items-center justify-content-between">
                 <span><i class="bi bi-table me-2"></i>All Bookings</span>
-                <span class="badge-soft" id="recordCount"><%= bookings.length %> records</span>
+                <span class="badge-soft" id="recordCount">Loading...</span>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -260,35 +343,12 @@
                             </tr>
                         </thead>
                         <tbody id="bookingsTableBody">
-                            <!-- Rows injected via EJS on load; refreshed via JS after that -->
-                            <% if (bookings.length === 0) { %>
-                                <tr id="emptyRow">
-                                    <td colspan="11" class="text-center text-muted py-4">
-                                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>No bookings found.
-                                    </td>
-                                </tr>
-                            <% } %>
-                            <% bookings.forEach(function(b) { %>
-                                <tr data-id="<%= b.id %>">
-                                    <td class="fw-semibold text-accent"><%= b.ticket_no %></td>
-                                    <td><%= b.journey_date %></td>
-                                    <td><%= b.passenger_name %></td>
-                                    <td><%= b.passenger_mobile %></td>
-                                    <td><%= b.from_place %></td>
-                                    <td><%= b.to_place %></td>
-                                    <td><%= b.seat_number %></td>
-                                    <td><%= b.operator %></td>
-                                    <td>₹<%= Number(b.fare).toFixed(2) %></td>
-                                    <td>
-                                        <span class="status-badge status-<%= b.booking_status.toLowerCase() %>"><%= b.booking_status %></span>
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-icon-table text-primary btn-edit-row" title="Edit"><i class="bi bi-pencil-square"></i></button>
-                                        <button class="btn btn-sm btn-icon-table text-danger btn-delete-row" title="Delete"><i class="bi bi-trash"></i></button>
-                                        <button class="btn btn-sm btn-icon-table text-success btn-print-row" title="Print"><i class="bi bi-printer"></i></button>
-                                    </td>
-                                </tr>
-                            <% }) %>
+                            <tr id="emptyRow">
+                                <td colspan="11" class="text-center text-muted py-4">
+                                    <div class="spinner-border text-accent mb-2" role="status"></div>
+                                    <div>Loading bookings...</div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

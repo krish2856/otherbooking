@@ -17,18 +17,14 @@ const cors = require('cors'); // Allows our frontend to talk to the backend from
 
 // We bring in the code that tells the server what to do when specific URLs are visited
 const otherBookingRoutes = require('./routes/otherBookingRoutes');
-const placeholderRoutes = require('./routes/placeholderRoutes');
 
 const app = express(); // Initialize our server app
 const PORT = process.env.PORT || 3000;
 
 // ---------------------------------------------------
-// 1. View Engine Setup (Frontend Connection)
+// 1. View Engine Setup (Removed)
 // ---------------------------------------------------
-// This tells the server: "We are using EJS to generate our HTML,
-// and you can find all those EJS template files in the 'frontend/views' folder!"
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '../frontend/views'));
+// We no longer use EJS because the frontend is a separate static app!
 
 // ---------------------------------------------------
 // 2. Middleware Configuration
@@ -46,11 +42,10 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 // ---------------------------------------------------
 // 3. Routing (Directing Traffic)
 // ---------------------------------------------------
-// When a user visits the main page "/", we automatically redirect them to "/other-booking"
-app.get('/', (req, res) => res.redirect('/other-booking'));
-// These two lines attach all our custom routes to the main app
+// When a user visits the main page "/", we automatically redirect them to the frontend index
+app.get('/', (req, res) => res.redirect('/index.html'));
+// This line attaches all our custom API routes to the main app
 app.use('/', otherBookingRoutes);
-app.use('/', placeholderRoutes);
 
 // ---------------------------------------------------
 // 4. Safety Nets (Error Handlers)

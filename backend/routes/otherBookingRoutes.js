@@ -5,8 +5,7 @@ const express = require('express');
 const router = express.Router();
 const OtherBookingController = require('../controllers/otherBookingController');
 
-// ---- Page route ----
-router.get('/other-booking', OtherBookingController.renderPage);
+// ---- Page route (Removed) ----
 
 // ---- REST API routes ----
 router.get('/api/other-bookings/search', OtherBookingController.search);          // must be BEFORE /:id

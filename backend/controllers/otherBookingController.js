@@ -58,27 +58,7 @@ function calculateAmounts(body) {
 
 const OtherBookingController = {
 
-    // ---------------------------------------------------
-    // Webpage Route: View the Main Booking Page
-    // When someone visits /other-booking in their browser, this runs.
-    // It grabs all past bookings and the next available ticket number,
-    // then sends all that data to our EJS HTML template to draw the page.
-    // ---------------------------------------------------
-    async renderPage(req, res) {
-        try {
-            const bookings = await OtherBookingModel.findAll();
-            const nextTicketNo = await generateNextTicketNo();
-            res.render('other-booking', {
-                title: 'Other Booking',
-                bookings,
-                nextTicketNo,
-                currentPath: '/other-booking'
-            });
-        } catch (err) {
-            console.error(err);
-            res.status(500).send('Server Error: ' + err.message);
-        }
-    },
+    // renderPage function removed because frontend is now static HTML
 
     // ---------------------------------------------------
     // API Route: Get All Bookings
