@@ -1,34 +1,29 @@
 // =====================================================
 // Database Configuration
-// Creates a MySQL connection pool using mysql2
+// Creates a PostgreSQL connection pool using pg
 // =====================================================
 require('dotenv').config();
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 
-const pool = mysql.createPool({
+const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
+    user: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'bus_reservation_db',
-    port: process.env.DB_PORT || 3306,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    dateStrings: true // return DATE/DATETIME as strings instead of JS Date objects
+    port: process.env.DB_PORT || 5432,
+    // Note: Render and Supabase often require SSL. Add it if your environment needs it:
+    // ssl: { rejectUnauthorized: false }
 });
 
-// Promise wrapper so we can use async/await in models & controllers
-const promisePool = pool.promise();
-
 // Test connection on startup
-pool.getConnection((err, connection) => {
+pool.connect((err, client, release) => {
     if (err) {
-        console.error('❌ MySQL connection failed:', err.message);
+        console.error('❌ PostgreSQL connection failed:', err.message);
         console.error('   Please check your .env database credentials.');
     } else {
-        console.log('✅ MySQL connected successfully to database:', process.env.DB_NAME);
-        connection.release();
+        console.log('✅ PostgreSQL connected successfully to database:', process.env.DB_NAME);
+        release();
     }
 });
 
-module.exports = promisePool;
+module.exports = pool;
