@@ -1,21 +1,24 @@
 // =====================================================
-// FRONTEND LOGIC: Other Booking Page
-//
-// This file runs entirely in the user's web browser.
-// It is responsible for making buttons clickable, talking to the backend
-// server without refreshing the page, doing math for the ticket price,
-// and creating the PDF tickets.
+// FRONTEND LOGIC: Other Booking Module
 // =====================================================
 document.addEventListener('DOMContentLoaded', function () {
 
-    // -------------------------------------------------
-    // API Configuration
-    // -------------------------------------------------
-    const API_BASE_URL = 'https://otherbooking.onrender.com';
+    // Dynamic API URL Detection
+    const getApiBaseUrl = () => {
+        const host = window.location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') {
+            return 'https://otherbooking.onrender.com';
+        }
+        if (host.includes('onrender.com')) {
+            return window.location.origin;
+        }
+        // Fallback for Vercel or external hostings
+        return 'https://otherbooking.onrender.com';
+    };
 
-    // -------------------------------------------------
-    // Element references
-    // -------------------------------------------------
+    const API_BASE_URL = getApiBaseUrl();
+
+    // DOM Elements
     const form = document.getElementById('bookingForm');
     const bookingIdField = document.getElementById('bookingId');
     const ticketNoField = document.getElementById('ticket_no');
@@ -39,30 +42,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const tableBody = document.getElementById('bookingsTableBody');
     const recordCount = document.getElementById('recordCount');
     const alertBox = document.getElementById('alertBox');
+    const printArea = document.getElementById('printArea');
 
     const calcFields = document.querySelectorAll('.calc-field');
-
-    let currentBookingData = null; // holds the loaded record for printing
-
-    // -------------------------------------------------
-    // Sidebar toggle (mobile)
-    // -------------------------------------------------
-    const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('show');
-            sidebarBackdrop.classList.toggle('show');
-        });
-        sidebarBackdrop.addEventListener('click', () => {
-            sidebar.classList.remove('show');
-            sidebarBackdrop.classList.remove('show');
-        });
-    }
+    let currentBookingData = null;
 
     // -------------------------------------------------
-    // Helper: show floating alert
+    // Helper: Floating Alert
     // -------------------------------------------------
     function showAlert(message, type = 'success') {
         const icon = type === 'success' ? 'bi-check-circle-fill'
@@ -83,16 +69,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 4500);
     }
 
-    // -------------------------------------------------
-    // Helper: today's date in YYYY-MM-DD
-    // -------------------------------------------------
+    // Helper: Date string
     function todayStr() {
         const d = new Date();
-        return d.toISOString().split('T')[0];
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
     // -------------------------------------------------
-    // Auto-calculate Net Amount & Due Amount
+    // Live Financial Calculations
     // -------------------------------------------------
     function recalcAmounts() {
         const fare = parseFloat(document.getElementById('fare').value) || 0;
@@ -108,9 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     calcFields.forEach(el => el.addEventListener('input', recalcAmounts));
 
-    // -------------------------------------------------
-    // Mobile number: numeric-only + live validation
-    // -------------------------------------------------
+    // Mobile input validation
     const mobileInput = document.getElementById('passenger_mobile');
     const mobileError = document.getElementById('mobileError');
     mobileInput.addEventListener('input', function () {
@@ -120,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // -------------------------------------------------
-    // Set form to "New Entry" mode
+    // Form Mode Control
     // -------------------------------------------------
     async function setNewMode() {
         form.reset();
@@ -135,36 +127,32 @@ document.addEventListener('DOMContentLoaded', function () {
         btnSave.disabled = false;
 
         formModeLabel.textContent = 'Mode: New Entry';
+        formModeLabel.className = 'badge bg-primary text-white';
         currentBookingData = null;
 
         await refreshNextTicket();
         clearRowSelection();
     }
 
-    // -------------------------------------------------
-    // Fetch & display next auto-generated ticket number
-    // -------------------------------------------------
     async function refreshNextTicket() {
         try {
+            ticketNoField.value = 'Fetching...';
             const res = await fetch(`${API_BASE_URL}/api/other-bookings/next-ticket`);
             const json = await res.json();
             if (json.success) {
                 ticketNoField.value = json.ticket_no;
-                nextTicketBadge.textContent = json.ticket_no;
+                if (nextTicketBadge) nextTicketBadge.textContent = json.ticket_no;
             } else {
-                nextTicketBadge.textContent = "Error";
-                showAlert("Failed to load ticket number: " + (json.message || json.errorName || ''), "danger");
+                ticketNoField.value = 'OB-Auto';
+                if (nextTicketBadge) nextTicketBadge.textContent = 'Auto';
             }
         } catch (err) {
             console.error('Failed to fetch next ticket number', err);
-            nextTicketBadge.textContent = "Offline";
-            showAlert("Network Error: Could not connect to API for ticket generation.", "danger");
+            ticketNoField.value = 'OB-Auto';
+            if (nextTicketBadge) nextTicketBadge.textContent = 'Auto';
         }
     }
 
-    // -------------------------------------------------
-    // Gather all data from the form fields into one neat package
-    // -------------------------------------------------
     function collectFormData() {
         return {
             booking_date: document.getElementById('booking_date').value,
@@ -185,9 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fare: document.getElementById('fare').value,
             discount: document.getElementById('discount').value,
             gst: document.getElementById('gst').value,
-            net_amount: document.getElementById('net_amount').value,
             paid_amount: document.getElementById('paid_amount').value,
-            due_amount: document.getElementById('due_amount').value,
             payment_mode: document.getElementById('payment_mode').value,
             pnr: document.getElementById('pnr').value.trim(),
             bus_number: document.getElementById('bus_number').value.trim(),
@@ -196,49 +182,47 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    // -------------------------------------------------
-    // Populate form fields from a booking record
-    // -------------------------------------------------
     function populateForm(b) {
         bookingIdField.value = b.id;
         ticketNoField.value = b.ticket_no;
-        document.getElementById('booking_date').value = b.booking_date;
-        document.getElementById('journey_date').value = b.journey_date;
-        document.getElementById('from_place').value = b.from_place;
-        document.getElementById('to_place').value = b.to_place;
-        document.getElementById('operator').value = b.operator;
+        document.getElementById('booking_date').value = b.booking_date ? String(b.booking_date).split('T')[0] : '';
+        document.getElementById('journey_date').value = b.journey_date ? String(b.journey_date).split('T')[0] : '';
+        document.getElementById('from_place').value = b.from_place || '';
+        document.getElementById('to_place').value = b.to_place || '';
+        document.getElementById('operator').value = b.operator || '';
         document.getElementById('coach').value = b.coach || '';
         document.getElementById('journey_time').value = b.journey_time || '';
-        document.getElementById('passenger_name').value = b.passenger_name;
-        document.getElementById('passenger_mobile').value = b.passenger_mobile;
-        document.getElementById('passenger_gender').value = b.passenger_gender;
+
+        document.getElementById('passenger_name').value = b.passenger_name || '';
+        document.getElementById('passenger_mobile').value = b.passenger_mobile || '';
+        document.getElementById('passenger_gender').value = b.passenger_gender || 'Male';
         document.getElementById('passenger_age').value = b.passenger_age || '';
         document.getElementById('seat_type').value = b.seat_type || 'Seater';
-        document.getElementById('seat_number').value = b.seat_number;
+
+        document.getElementById('seat_number').value = b.seat_number || '';
         document.getElementById('pickup_point').value = b.pickup_point || '';
         document.getElementById('drop_point').value = b.drop_point || '';
-        document.getElementById('fare').value = b.fare;
-        document.getElementById('discount').value = b.discount;
-        document.getElementById('gst').value = b.gst;
-        document.getElementById('net_amount').value = b.net_amount;
-        document.getElementById('paid_amount').value = b.paid_amount;
-        
-        document.getElementById('payment_mode').value = b.payment_mode;
-        
-        
+        document.getElementById('pnr').value = b.pnr || '';
+
+        document.getElementById('fare').value = b.fare || 0;
+        document.getElementById('discount').value = b.discount || 0;
+        document.getElementById('gst').value = b.gst || 0;
+        document.getElementById('paid_amount').value = b.paid_amount || 0;
+        document.getElementById('payment_mode').value = b.payment_mode || 'Cash';
+        document.getElementById('bus_number').value = b.bus_number || '';
         document.getElementById('remarks').value = b.remarks || '';
-        document.getElementById('booking_status').value = b.booking_status;
+        document.getElementById('booking_status').value = b.booking_status || 'Confirmed';
 
-        formModeLabel.textContent = `Mode: Editing Ticket ${b.ticket_no}`;
+        recalcAmounts();
+
+        formModeLabel.textContent = `Mode: Editing #${b.ticket_no}`;
+        formModeLabel.className = 'badge bg-warning text-dark';
         currentBookingData = b;
-    }
-
-    function clearRowSelection() {
-        document.querySelectorAll('#bookingsTable tbody tr').forEach(r => r.classList.remove('row-selected'));
+        btnSave.disabled = true;
     }
 
     // -------------------------------------------------
-    // CREATE (Save a brand new booking)
+    // CREATE (Save Ticket)
     // -------------------------------------------------
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -246,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
             form.reportValidity();
             return;
         }
+
         const data = collectFormData();
 
         try {
@@ -265,8 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             showAlert(`Booking saved successfully! Ticket No: <b>${json.data.ticket_no}</b>`, 'success');
             await loadAllBookings();
-            populateForm(json.data);
-            btnSave.disabled = false;
+            await setNewMode();
         } catch (err) {
             console.error(err);
             showAlert('Server error while saving booking.', 'danger');
@@ -275,12 +259,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // -------------------------------------------------
-    // UPDATE (Save changes to an existing booking)
+    // UPDATE
     // -------------------------------------------------
     btnUpdate.addEventListener('click', async function () {
         const id = bookingIdField.value;
         if (!id) {
-            showAlert('Please select a booking to update.', 'warning');
+            showAlert('Please select a booking from the table to update.', 'warning');
             return;
         }
         if (!form.checkValidity()) {
@@ -302,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            showAlert('Booking updated successfully!', 'success');
+            showAlert(`Booking <b>#${json.data.ticket_no}</b> updated successfully!`, 'success');
             await loadAllBookings();
             populateForm(json.data);
         } catch (err) {
@@ -320,17 +304,15 @@ document.addEventListener('DOMContentLoaded', function () {
             showAlert('Please select a booking to delete.', 'warning');
             return;
         }
-        if (!confirm('Are you sure you want to delete this booking? This action cannot be undone.')) return;
+        if (!confirm('Are you sure you want to delete this booking?')) return;
 
         try {
             const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`, { method: 'DELETE' });
             const json = await res.json();
-
             if (!res.ok || !json.success) {
                 showAlert(json.message || 'Failed to delete booking.', 'danger');
                 return;
             }
-
             showAlert('Booking deleted successfully.', 'success');
             await loadAllBookings();
             await setNewMode();
@@ -340,14 +322,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // -------------------------------------------------
-    // NEW / CLEAR
-    // -------------------------------------------------
     btnNew.addEventListener('click', setNewMode);
     btnClear.addEventListener('click', setNewMode);
 
     // -------------------------------------------------
-    // FETCH DATA: Load all bookings from the server & render table
+    // Read & Render All Bookings
     // -------------------------------------------------
     async function loadAllBookings() {
         try {
@@ -356,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (json.success) {
                 renderTable(json.data);
             } else {
-                tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">Error: ${json.message || json.errorName || 'Failed to load'}</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">Error: ${json.message || 'Failed to load'}</td></tr>`;
             }
         } catch (err) {
             console.error('Failed to load bookings', err);
@@ -364,9 +343,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // -------------------------------------------------
-    // Render table rows
-    // -------------------------------------------------
     function renderTable(rows) {
         recordCount.textContent = `${rows.length} record${rows.length !== 1 ? 's' : ''}`;
 
@@ -384,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const formattedDate = b.journey_date ? String(b.journey_date).split('T')[0] : '';
             return `
             <tr data-id="${b.id}">
-                <td class="fw-semibold text-accent">${escapeHtml(b.ticket_no)}</td>
+                <td class="fw-semibold text-primary">${escapeHtml(b.ticket_no)}</td>
                 <td>${escapeHtml(formattedDate)}</td>
                 <td>${escapeHtml(b.passenger_name)}</td>
                 <td>${escapeHtml(b.passenger_mobile)}</td>
@@ -399,26 +375,30 @@ document.addEventListener('DOMContentLoaded', function () {
         `}).join('');
     }
 
-    function escapeHtml(str) {
-        if (str === null || str === undefined) return '';
-        return String(str)
-            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    function clearRowSelection() {
+        tableBody.querySelectorAll('tr').forEach(r => r.classList.remove('table-active'));
     }
 
-    // -------------------------------------------------
-    // Table row actions (Edit / Delete / Print) — delegated
-    // -------------------------------------------------
+    // Delegate Table Row Actions
     tableBody.addEventListener('click', async function (e) {
         const row = e.target.closest('tr[data-id]');
         if (!row) return;
         const id = row.getAttribute('data-id');
 
         if (e.target.closest('.btn-edit-row')) {
-            await loadBookingIntoForm(id);
-            clearRowSelection();
-            row.classList.add('row-selected');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`);
+                const json = await res.json();
+                if (json.success) {
+                    populateForm(json.data);
+                    clearRowSelection();
+                    row.classList.add('table-active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert('Failed to fetch booking details.', 'danger');
+            }
         }
 
         if (e.target.closest('.btn-delete-row')) {
@@ -426,45 +406,33 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`, { method: 'DELETE' });
                 const json = await res.json();
-                if (!res.ok || !json.success) {
-                    showAlert(json.message || 'Failed to delete booking.', 'danger');
-                    return;
+                if (json.success) {
+                    showAlert('Booking deleted successfully.', 'success');
+                    await loadAllBookings();
+                    if (bookingIdField.value === id) await setNewMode();
                 }
-                showAlert('Booking deleted successfully.', 'success');
-                await loadAllBookings();
-                if (bookingIdField.value === id) await setNewMode();
             } catch (err) {
                 console.error(err);
-                showAlert('Server error while deleting booking.', 'danger');
+                showAlert('Failed to delete booking.', 'danger');
             }
         }
 
         if (e.target.closest('.btn-print-row')) {
-            const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`);
-            const json = await res.json();
-            if (json.success) {
-                printTicket(json.data);
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`);
+                const json = await res.json();
+                if (json.success) {
+                    populateForm(json.data);
+                    window.print();
+                }
+            } catch (err) {
+                console.error(err);
             }
         }
     });
 
-    async function loadBookingIntoForm(id) {
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/other-bookings/${id}`);
-            const json = await res.json();
-            if (json.success) {
-                populateForm(json.data);
-            } else {
-                showAlert('Booking not found.', 'danger');
-            }
-        } catch (err) {
-            console.error(err);
-            showAlert('Failed to load booking.', 'danger');
-        }
-    }
-
     // -------------------------------------------------
-    // SEARCH
+    // SEARCH & FILTER
     // -------------------------------------------------
     searchField.addEventListener('change', function () {
         const isDate = this.value === 'journey_date';
@@ -483,19 +451,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const res = await fetch(`${API_BASE_URL}/api/other-bookings/search?field=${encodeURIComponent(field)}&keyword=${encodeURIComponent(keyword)}`);
+            const url = `${API_BASE_URL}/api/other-bookings/search?field=${encodeURIComponent(field)}&keyword=${encodeURIComponent(keyword)}`;
+            const res = await fetch(url);
             const json = await res.json();
             if (json.success) {
                 renderTable(json.data);
-                if (json.data.length === 0) {
-                    showAlert('No matching bookings found.', 'warning');
-                }
+                showAlert(`Found ${json.data.length} matching booking(s).`, 'info');
             } else {
                 showAlert(json.message || 'Search failed.', 'danger');
             }
         } catch (err) {
             console.error(err);
-            showAlert('Server error while searching.', 'danger');
+            showAlert('Server error during search.', 'danger');
         }
     });
 
@@ -508,119 +475,15 @@ document.addEventListener('DOMContentLoaded', function () {
         await loadAllBookings();
     });
 
-    // Allow Enter key to trigger search
-    searchKeyword.addEventListener('keypress', e => { if (e.key === 'Enter') btnSearch.click(); });
-
     // -------------------------------------------------
-    // PRINT TICKET
+    // INITIALIZATION
     // -------------------------------------------------
-    function buildTicketHtml(b) {
-        return `
-        <div class="print-ticket">
-            <div class="pt-header">
-                <div>
-                    <div class="pt-title"><i class="bi bi-bus-front-fill"></i>OtherBooking Pro</div>
-                    <div class="pt-sub">E-Ticket / Booking Confirmation</div>
-                </div>
-                <div class="text-end">
-                    <div class="pt-sub">Ticket No</div>
-                    <div class="pt-title" style="font-size:16px;">${escapeHtml(b.ticket_no)}</div>
-                </div>
-            </div>
-            <div class="pt-grid">
-                <div><span class="label">Booking Date:</span> <span class="value">${escapeHtml(b.booking_date)}</span></div>
-                <div><span class="label">Journey Date:</span> <span class="value">${escapeHtml(b.journey_date)}</span></div>
-                <div><span class="label">From:</span> <span class="value">${escapeHtml(b.from_place)}</span></div>
-                <div><span class="label">To:</span> <span class="value">${escapeHtml(b.to_place)}</span></div>
-                <div><span class="label">Operator:</span> <span class="value">${escapeHtml(b.operator)}</span></div>
-                <div><span class="label">Coach:</span> <span class="value">${escapeHtml(b.coach || '-')}</span></div>
-                <div><span class="label">Journey Time:</span> <span class="value">${escapeHtml(b.journey_time || '-')}</span></div>
-                <div><span class="label">Bus Number:</span> <span class="value">${escapeHtml(b.bus_number || '-')}</span></div>
-                <div><span class="label">Passenger:</span> <span class="value">${escapeHtml(b.passenger_name)}</span></div>
-                <div><span class="label">Mobile:</span> <span class="value">${escapeHtml(b.passenger_mobile)}</span></div>
-                <div><span class="label">Gender / Age:</span> <span class="value">${escapeHtml(b.passenger_gender)} / ${escapeHtml(b.passenger_age || '-')}</span></div>
-                <div><span class="label">Seat:</span> <span class="value">${escapeHtml(b.seat_number)} (${escapeHtml(b.seat_type || '-')})</span></div>
-                <div><span class="label">Pickup Point:</span> <span class="value">${escapeHtml(b.pickup_point || '-')}</span></div>
-                <div><span class="label">Drop Point:</span> <span class="value">${escapeHtml(b.drop_point || '-')}</span></div>
-                
-                <div><span class="label">Payment Mode:</span> <span class="value">${escapeHtml(b.payment_mode)}</span></div>
-                <div><span class="label">Status:</span> <span class="value">${escapeHtml(b.booking_status)}</span></div>
-                <div><span class="label">Remarks:</span> <span class="value">${escapeHtml(b.remarks || '-')}</span></div>
-            </div>
-            <div class="pt-fare-box">
-                <div>Fare: ₹${Number(b.fare).toFixed(2)} &nbsp;|&nbsp; Discount: ₹${Number(b.discount).toFixed(2)} &nbsp;|&nbsp; GST: ₹${Number(b.gst).toFixed(2)}</div>
-                <div>Net Payable: ₹${Number(b.net_amount).toFixed(2)}</div>
-            </div>
-            <div class="pt-grid mt-2">
-                <div><span class="label">Paid Amount:</span> <span class="value text-success">₹${Number(b.paid_amount).toFixed(2)}</span></div>
-                <div><span class="label">Due Amount:</span> <span class="value text-danger">₹${Number(b.due_amount).toFixed(2)}</span></div>
-            </div>
-            <div class="pt-footer">
-                This is a computer-generated ticket and does not require a signature. &bull; Please carry a valid photo ID during travel.<br>
-                Thank you for booking with BusReservePro Travels!
-            </div>
-        </div>`;
+    async function init() {
+        document.getElementById('booking_date').value = todayStr();
+        recalcAmounts();
+        await refreshNextTicket();
+        await loadAllBookings();
     }
 
-    function printTicket(b) {
-        const printArea = document.getElementById('printArea');
-        printArea.innerHTML = buildTicketHtml(b);
-        printArea.classList.remove('d-none');
-        window.print();
-        setTimeout(() => printArea.classList.add('d-none'), 500);
-    }
-
-    btnPrint.addEventListener('click', function () {
-        if (!currentBookingData) {
-            showAlert('Please select a booking first.', 'warning');
-            return;
-        }
-        printTicket(currentBookingData);
-    });
-
-    // -------------------------------------------------
-    // DOWNLOAD PDF (uses html2canvas + jsPDF)
-    // -------------------------------------------------
-    btnPdf.addEventListener('click', async function () {
-        if (!currentBookingData) {
-            showAlert('Please select a booking first.', 'warning');
-            return;
-        }
-
-        const printArea = document.getElementById('printArea');
-        printArea.innerHTML = buildTicketHtml(currentBookingData);
-        printArea.classList.remove('d-none');
-        printArea.style.position = 'fixed';
-        printArea.style.left = '-9999px';
-        printArea.style.display = 'block';
-
-        try {
-            const ticketEl = printArea.querySelector('.print-ticket');
-            const canvas = await html2canvas(ticketEl, { scale: 2 });
-            const imgData = canvas.toDataURL('image/png');
-
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'pt', [canvas.width / 2, canvas.height / 2]);
-            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
-            pdf.save(`Ticket_${currentBookingData.ticket_no}.pdf`);
-
-            showAlert('Ticket PDF downloaded successfully!', 'success');
-        } catch (err) {
-            console.error(err);
-            showAlert('Failed to generate PDF.', 'danger');
-        } finally {
-            printArea.classList.add('d-none');
-            printArea.style.position = '';
-            printArea.style.left = '';
-            printArea.style.display = 'none';
-        }
-    });
-
-    // -------------------------------------------------
-    // INIT
-    // -------------------------------------------------
-    document.getElementById('booking_date').value = todayStr();
-    recalcAmounts();
-    loadAllBookings();
-    refreshNextTicket();
+    init();
 });

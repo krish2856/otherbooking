@@ -3,130 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Other Booking System</title>
-
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <!-- Google Font -->
+    <title>Other Booking Management - Bus Reservation System</title>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 
-<!-- ===================== TOP NAVBAR ===================== -->
-<nav class="top-navbar d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-sm btn-icon d-lg-none" id="sidebarToggle" title="Toggle Menu">
-            <i class="bi bi-list fs-4"></i>
-        </button>
-        <div class="brand d-flex align-items-center gap-2">
-            <div class="brand-icon">
-                <i class="bi bi-bus-front-fill"></i>
+    <!-- Header -->
+    <header class="app-header py-3 px-4 mb-4">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-bus-front fs-2 text-info"></i>
+                <div>
+                    <h1 class="h4 mb-0 fw-bold">Bus Reservation Management</h1>
+                    <small class="opacity-75">Other Booking Module</small>
+                </div>
             </div>
-            <div class="brand-text d-none d-sm-block">
-                <div class="brand-title">OtherBooking<span class="text-accent">Pro</span></div>
-                <div class="brand-subtitle">Admin Panel</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="d-flex align-items-center gap-3">
-        <div class="navbar-search d-none d-md-flex align-items-center">
-            <i class="bi bi-search"></i>
-            <input type="text" class="form-control form-control-sm" placeholder="Quick search...">
-        </div>
-
-        <button class="btn btn-icon position-relative" title="Notifications">
-            <i class="bi bi-bell"></i>
-            <span class="notif-dot"></span>
-        </button>
-
-        <div class="dropdown">
-            <button class="btn btn-icon d-flex align-items-center gap-2 dropdown-toggle admin-btn" data-bs-toggle="dropdown">
-                <div class="avatar">A</div>
-                <span class="d-none d-md-inline fw-semibold">Admin</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                <li><a class="dropdown-item" href="placeholder.html?page=Profile"><i class="bi bi-person me-2"></i>Profile</a></li>
-                <li><a class="dropdown-item" href="placeholder.html?page=Settings"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item text-danger" href="placeholder.html?page=Logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="app-layout">
-    <!-- ===================== LEFT SIDEBAR ===================== -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-section-title">Main</div>
-        <ul class="sidebar-menu">
-            <li><a href="placeholder.html?page=Dashboard"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a></li>
-            <li><a href="placeholder.html?page=Bus%20Booking"><i class="bi bi-ticket-perforated"></i><span>Bus Booking</span></a></li>
-            <li class="active"><a href="index.html"><i class="bi bi-journal-plus"></i><span>Other Booking</span></a></li>
-            <li><a href="placeholder.html?page=Cancellation"><i class="bi bi-arrow-counterclockwise"></i><span>Cancellation</span></a></li>
-        </ul>
-
-        <div class="sidebar-section-title">Management</div>
-        <ul class="sidebar-menu">
-            <li><a href="placeholder.html?page=Bus%20Coach"><i class="bi bi-bus-front"></i><span>Bus / Coach</span></a></li>
-            <li><a href="placeholder.html?page=Routes"><i class="bi bi-signpost-split"></i><span>Routes</span></a></li>
-            <li><a href="placeholder.html?page=Operators"><i class="bi bi-building"></i><span>Operators</span></a></li>
-            <li><a href="placeholder.html?page=Passengers"><i class="bi bi-people"></i><span>Passengers</span></a></li>
-        </ul>
-
-        <div class="sidebar-section-title">Finance</div>
-        <ul class="sidebar-menu">
-            <li><a href="placeholder.html?page=Payments"><i class="bi bi-cash-coin"></i><span>Payments</span></a></li>
-            <li><a href="placeholder.html?page=Reports"><i class="bi bi-graph-up-arrow"></i><span>Reports</span></a></li>
-        </ul>
-
-        <div class="sidebar-section-title">System</div>
-        <ul class="sidebar-menu">
-            <li><a href="placeholder.html?page=Users"><i class="bi bi-people-fill"></i><span>Users</span></a></li>
-            <li><a href="placeholder.html?page=Settings"><i class="bi bi-gear"></i><span>Settings</span></a></li>
-        </ul>
-    </aside>
-    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-
-    <main class="main-content">
-
-        <!-- ===================== PAGE HEADER ===================== -->
-        <div class="page-header d-flex flex-wrap align-items-center justify-content-between gap-2">
             <div>
-                <h4 class="page-title mb-0"><i class="bi bi-journal-plus text-accent me-2"></i>Other Booking</h4>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Other Booking</li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="d-flex gap-2">
-                <span class="badge-soft"><i class="bi bi-ticket-detailed me-1"></i>Next Ticket: <b id="nextTicketBadge">---</b></span>
+                <span class="badge bg-light text-dark px-3 py-2 rounded-pill fw-semibold">
+                    <i class="bi bi-ticket-perforated me-1 text-primary"></i>
+                    Next: <span id="nextTicketBadge">Loading...</span>
+                </span>
             </div>
         </div>
+    </header>
 
-        <!-- ===================== ALERT PLACEHOLDER ===================== -->
-        <div id="alertBox" class="alert-floating"></div>
+    <!-- Main Container -->
+    <main class="container-fluid px-4 pb-5">
+        <div id="alertBox"></div>
 
-        <!-- ===================== BOOKING FORM CARD ===================== -->
+        <!-- BOOKING FORM CARD -->
         <div class="card app-card mb-4">
-            <div class="card-header app-card-header d-flex align-items-center justify-content-between">
-                <span><i class="bi bi-pencil-square me-2"></i>Booking Form</span>
-                <span class="text-muted small" id="formModeLabel">Mode: New Entry</span>
+            <div class="card-header app-card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-journal-plus me-2"></i>Booking Details</span>
+                <span class="badge bg-primary text-white" id="formModeLabel">Mode: New Entry</span>
             </div>
-            <div class="card-body">
-                <form id="bookingForm" autocomplete="off">
-                    <input type="hidden" id="bookingId" value="">
+            <div class="card-body p-4">
+                <form id="bookingForm" novalidate>
+                    <input type="hidden" id="bookingId">
 
-                    <!-- ===== Section: Journey Details ===== -->
-                    <div class="form-section-title"><i class="bi bi-signpost-2 me-1"></i>Journey Details</div>
-                    <div class="row g-3">
+                    <!-- Section: Trip Information -->
+                    <div class="form-section-title"><i class="bi bi-geo-alt me-1"></i>Trip Information</div>
+                    <div class="row g-3 mb-3">
                         <div class="col-md-3">
                             <label class="form-label">Booking Date <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="booking_date" required>
@@ -143,14 +69,16 @@
                             <label class="form-label">To <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="to_place" placeholder="e.g. Mumbai" required>
                         </div>
+                    </div>
 
+                    <div class="row g-3 mb-3">
                         <div class="col-md-3">
                             <label class="form-label">Operator <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="operator" placeholder="e.g. Shree Travels" required>
+                            <input type="text" class="form-control" id="operator" placeholder="Travel Operator Name" required>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Coach</label>
-                            <input type="text" class="form-control" id="coach" placeholder="e.g. A1">
+                            <input type="text" class="form-control" id="coach" placeholder="e.g. Sleeper / AC">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Journey Time</label>
@@ -162,19 +90,19 @@
                         </div>
                     </div>
 
-                    <!-- ===== Section: Passenger Details ===== -->
-                    <div class="form-section-title mt-4"><i class="bi bi-person-vcard me-1"></i>Passenger Details</div>
-                    <div class="row g-3">
+                    <!-- Section: Passenger Information -->
+                    <div class="form-section-title"><i class="bi bi-person-vcard me-1"></i>Passenger Information</div>
+                    <div class="row g-3 mb-3">
                         <div class="col-md-3">
                             <label class="form-label">Passenger Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="passenger_name" placeholder="Full name" required>
+                            <input type="text" class="form-control" id="passenger_name" placeholder="Full Name" required>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
-                            <input type="tel" class="form-control" id="passenger_mobile" maxlength="10" placeholder="10-digit number" required>
-                            <div class="form-text text-danger d-none" id="mobileError">Enter a valid 10-digit mobile number.</div>
+                            <input type="tel" class="form-control" id="passenger_mobile" maxlength="10" placeholder="10-digit mobile number" required>
+                            <div class="form-text text-danger d-none" id="mobileError">Enter valid 10-digit mobile number.</div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">Gender</label>
                             <select class="form-select" id="passenger_gender">
                                 <option value="Male">Male</option>
@@ -182,16 +110,11 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">Age</label>
                             <input type="number" class="form-control" id="passenger_age" min="1" max="120" placeholder="Age">
                         </div>
-                    </div>
-
-                    <!-- ===== Section: Seat & Pickup/Drop ===== -->
-                    <div class="form-section-title mt-4"><i class="bi bi-grid-3x3-gap me-1"></i>Seat &amp; Boarding Details</div>
-                    <div class="row g-3">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">Seat Type</label>
                             <select class="form-select" id="seat_type">
                                 <option value="Seater">Seater</option>
@@ -199,76 +122,86 @@
                                 <option value="Semi-Sleeper">Semi-Sleeper</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
                         <div class="col-md-3">
                             <label class="form-label">Seat Number <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="seat_number" placeholder="e.g. S-12" required>
+                            <input type="text" class="form-control" id="seat_number" placeholder="e.g. L12 or 15" required>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Pickup Point</label>
-                            <input type="text" class="form-control" id="pickup_point" placeholder="Pickup point">
+                            <input type="text" class="form-control" id="pickup_point" placeholder="Pickup location">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Drop Point</label>
-                            <input type="text" class="form-control" id="drop_point" placeholder="Drop point">
+                            <input type="text" class="form-control" id="drop_point" placeholder="Drop location">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">PNR</label>
+                            <input type="text" class="form-control" id="pnr" placeholder="Optional PNR">
                         </div>
                     </div>
 
-                    <!-- ===== Section: Fare & Payment ===== -->
-                    <div class="form-section-title mt-4"><i class="bi bi-cash-stack me-1"></i>Fare &amp; Payment</div>
-                    <div class="row g-3">
+                    <!-- Section: Payment & Fare -->
+                    <div class="form-section-title"><i class="bi bi-currency-rupee me-1"></i>Fare & Payment Details</div>
+                    <div class="row g-3 mb-3">
                         <div class="col-md-2">
                             <label class="form-label">Fare (₹) <span class="text-danger">*</span></label>
-                            <input type="number" step="0.01" min="0" class="form-control calc-field" id="fare" placeholder="0.00" required>
+                            <input type="number" class="form-control calc-field" id="fare" min="0" step="0.01" placeholder="0.00" required>
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">Discount (₹)</label>
-                            <input type="number" step="0.01" min="0" class="form-control calc-field" id="discount" placeholder="0.00" value="0">
+                            <input type="number" class="form-control calc-field" id="discount" min="0" step="0.01" value="0">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">GST (₹)</label>
-                            <input type="number" step="0.01" min="0" class="form-control calc-field" id="gst" placeholder="0.00" value="0">
+                            <input type="number" class="form-control calc-field" id="gst" min="0" step="0.01" value="0">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">Net Amount (₹)</label>
-                            <input type="number" step="0.01" class="form-control bg-light fw-bold" id="net_amount" readonly>
+                            <input type="text" class="form-control fw-bold bg-light" id="net_amount" value="0.00" readonly>
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">Paid Amount (₹)</label>
-                            <input type="number" step="0.01" min="0" class="form-control calc-field" id="paid_amount" placeholder="0.00" value="0">
+                            <input type="number" class="form-control calc-field" id="paid_amount" min="0" step="0.01" value="0">
                         </div>
-                      
+                        <div class="col-md-2">
+                            <label class="form-label">Due Amount (₹)</label>
+                            <input type="text" class="form-control fw-bold text-danger bg-light" id="due_amount" value="0.00" readonly>
+                        </div>
+                    </div>
 
+                    <div class="row g-3 mb-3">
                         <div class="col-md-3">
-                            <label class="form-label">Payment Mode <span class="text-danger">*</span></label>
-                            <select class="form-select" id="payment_mode" required>
+                            <label class="form-label">Payment Mode</label>
+                            <select class="form-select" id="payment_mode">
                                 <option value="Cash">Cash</option>
-                                <option value="UPI">UPI</option>
-                                <option value="Card">Card</option>
-                                <option value="Online">Online</option>
+                                <option value="UPI">UPI / GPay</option>
+                                <option value="Card">Credit / Debit Card</option>
+                                <option value="NetBanking">Net Banking</option>
                             </select>
                         </div>
-                       
                         <div class="col-md-3">
                             <label class="form-label">Bus Number</label>
                             <input type="text" class="form-control" id="bus_number" placeholder="e.g. GJ-01-AB-1234">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Booking Status <span class="text-danger">*</span></label>
-                            <select class="form-select" id="booking_status" required>
+                            <label class="form-label">Booking Status</label>
+                            <select class="form-select" id="booking_status">
                                 <option value="Confirmed">Confirmed</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
-
-                        <div class="col-md-12">
+                        <div class="col-md-3">
                             <label class="form-label">Remarks</label>
-                            <textarea class="form-control" id="remarks" rows="2" placeholder="Any additional notes..."></textarea>
+                            <input type="text" class="form-control" id="remarks" placeholder="Optional notes">
                         </div>
                     </div>
 
-                    <!-- ===== Action Buttons ===== -->
-                    <div class="form-actions mt-4 d-flex flex-wrap gap-2">
+                    <!-- Action Buttons -->
+                    <div class="d-flex flex-wrap gap-2 mt-4">
                         <button type="button" class="btn btn-outline-secondary" id="btnNew"><i class="bi bi-file-earmark-plus me-1"></i>New</button>
                         <button type="submit" class="btn btn-accent" id="btnSave"><i class="bi bi-save me-1"></i>Save</button>
                         <button type="button" class="btn btn-warning text-white" id="btnUpdate"><i class="bi bi-arrow-repeat me-1"></i>Update</button>
@@ -282,12 +215,12 @@
             </div>
         </div>
 
-        <!-- ===================== SEARCH CARD ===================== -->
+        <!-- SEARCH CARD -->
         <div class="card app-card mb-4">
             <div class="card-header app-card-header">
                 <i class="bi bi-search me-2"></i>Search Bookings
             </div>
-            <div class="card-body">
+            <div class="card-body p-3">
                 <div class="row g-2 align-items-end">
                     <div class="col-md-3">
                         <label class="form-label">Search By</label>
@@ -299,12 +232,12 @@
                             <option value="journey_date">Journey Date</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <label class="form-label">Keyword</label>
-                        <input type="text" class="form-control" id="searchKeyword" placeholder="Enter search keyword...">
+                        <input type="text" class="form-control" id="searchKeyword" placeholder="Enter keyword to search...">
                         <input type="date" class="form-control d-none" id="searchKeywordDate">
                     </div>
-                    <div class="col-md-3 d-flex gap-2">
+                    <div class="col-md-4 d-flex gap-2">
                         <button class="btn btn-accent w-100" id="btnSearch"><i class="bi bi-search me-1"></i>Search</button>
                         <button class="btn btn-outline-secondary w-100" id="btnResetSearch"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
                     </div>
@@ -312,9 +245,9 @@
             </div>
         </div>
 
-        <!-- ===================== BOOKINGS TABLE ===================== -->
-        <div class="card app-card mb-4">
-            <div class="card-header app-card-header d-flex align-items-center justify-content-between">
+        <!-- BOOKINGS TABLE CARD -->
+        <div class="card app-card">
+            <div class="card-header app-card-header d-flex justify-content-between align-items-center">
                 <span><i class="bi bi-table me-2"></i>All Bookings</span>
                 <span class="badge-soft" id="recordCount">Loading...</span>
             </div>
@@ -335,7 +268,7 @@
                         <tbody id="bookingsTableBody">
                             <tr id="emptyRow">
                                 <td colspan="7" class="text-center text-muted py-4">
-                                    <div class="spinner-border text-accent mb-2" role="status"></div>
+                                    <div class="spinner-border text-primary mb-2" role="status"></div>
                                     <div>Loading bookings...</div>
                                 </td>
                             </tr>
@@ -344,19 +277,17 @@
                 </div>
             </div>
         </div>
-
     </main>
-</div>
 
-<!-- ===================== PRINT TICKET TEMPLATE (hidden, used for printing/PDF) ===================== -->
-<div id="printArea" class="d-none"></div>
+    <!-- Hidden Print Area for HTML2Canvas / PDF -->
+    <div id="printArea" class="d-none"></div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- jsPDF + html2canvas for Download PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<!-- Custom JS -->
-<script src="/js/other-booking.js"></script>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- PDF Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Application Logic -->
+    <script src="js/other-booking.js"></script>
 </body>
 </html>

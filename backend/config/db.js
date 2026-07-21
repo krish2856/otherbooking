@@ -1,26 +1,23 @@
 // =====================================================
-// Database Configuration
-// Creates a PostgreSQL connection pool using pg
+// Database Configuration: PostgreSQL (`pg`)
 // =====================================================
 require('dotenv').config();
 const { Pool } = require('pg');
 
+const connectionString = process.env.DATABASE_URL || 
+    'postgresql://neondb_owner:npg_RC8IGebyo6kp@ep-cold-feather-aw8t1ayt-pooler.c-12.us-east-1.aws.neon.tech/neondb?sslmode=require';
+
 const pool = new Pool({
-    host: 'ep-cold-feather-aw8t1ayt-pooler.c-12.us-east-1.aws.neon.tech',
-    user: 'neondb_owner',
-    password: 'npg_RC8IGebyo6kp',
-    database: 'neondb',
-    port: 5432,
+    connectionString: connectionString,
     ssl: { rejectUnauthorized: false }
 });
 
-// Test connection on startup
+// Verify connection status on boot
 pool.connect((err, client, release) => {
     if (err) {
-        console.error('❌ PostgreSQL connection failed:', err.message);
-        console.error('   Please check your .env database credentials.');
+        console.error('❌ PostgreSQL connection error:', err.message);
     } else {
-        console.log('✅ PostgreSQL connected successfully to database:', process.env.DB_NAME);
+        console.log('✅ PostgreSQL connected successfully to Neon Cloud Database');
         release();
     }
 });
