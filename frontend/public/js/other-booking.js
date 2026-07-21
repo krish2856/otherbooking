@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('net_amount').value = '0.00';
         document.getElementById('due_amount').value = '0.00';
         mobileError.classList.add('d-none');
+        btnSave.disabled = false;
 
         formModeLabel.textContent = 'Mode: New Entry';
         currentBookingData = null;
@@ -260,6 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showAlert(`Booking saved successfully! Ticket No: <b>${json.data.ticket_no}</b>`, 'success');
             await loadAllBookings();
             populateForm(json.data);
+            btnSave.disabled = false;
         } catch (err) {
             console.error(err);
             showAlert('Server error while saving booking.', 'danger');
