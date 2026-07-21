@@ -55,6 +55,22 @@ app.use((req, res) => {
     res.status(404).send('<h2 style="font-family:sans-serif;text-align:center;margin-top:50px;">404 - Page Not Found</h2>');
 });
 
+// Debug route to see exact error
+app.get('/api/test-db', async (req, res) => {
+    try {
+        const pool = require('./config/db');
+        const result = await pool.query('SELECT 1 AS success');
+        res.json({ success: true, result: result.rows });
+    } catch (err) {
+        res.status(500).json({ 
+            success: false, 
+            errorName: err.name,
+            errorMessage: err.message,
+            stack: err.stack
+        });
+    }
+});
+
 // Global Error Handler: If the server crashes or hits an unexpected bug, this catches it
 // and prevents the whole app from going down.
 app.use((err, req, res, next) => {
