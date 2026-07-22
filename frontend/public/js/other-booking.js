@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // -------------------------------------------------
     function showAlert(message, type = 'success') {
         const icon = type === 'success' ? 'bi-check-circle-fill'
-                    : type === 'danger' ? 'bi-x-circle-fill'
-                    : 'bi-exclamation-triangle-fill';
+            : type === 'danger' ? 'bi-x-circle-fill'
+                : 'bi-exclamation-triangle-fill';
         alertBox.innerHTML = `
             <div class="alert alert-${type} alert-dismissible fade show d-flex align-items-center" role="alert">
                 <i class="bi ${icon} me-2"></i>
@@ -481,8 +481,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 <!-- Header -->
                 <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
-                        <div class="ticket-header-title"><i class="bi bi-bus-front me-2"></i>BUS RESERVATION TICKET</div>
-                        <small class="text-muted">Official Passenger Travel Receipt</small>
+                        <div class="ticket-header-title"><i class="bi bi-bus-front me-2"></i>Ganga Travels</div>
+                        <small class="text-muted">7228882888</small>
                     </div>
                     <div class="text-end">
                         <span class="badge bg-primary fs-6 px-3 py-2">Ticket: ${escapeHtml(b.ticket_no)}</span>
@@ -590,7 +590,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <!-- Footer Terms -->
                 <div class="text-center text-muted small pt-2 border-top">
-                    <div><i class="bi bi-info-circle me-1"></i>Please report at pickup point 15 minutes prior to departure. Carry a valid photo ID.</div>
+                    <div><i class="bi bi-info-circle me-1"></i>Please report at pickup point 15 minutes prior to departure. Carry a valid photo ID. NON-REFUNDABLE.</div>
                 </div>
             </div>
         `;
@@ -601,7 +601,8 @@ document.addEventListener('DOMContentLoaded', function () {
             showAlert('Please select or create a booking to print.', 'warning');
             return;
         }
-        printArea.innerHTML = generateTicketHtml(b);
+        const ticketHtml = generateTicketHtml(b);
+        printArea.innerHTML = ticketHtml + ticketHtml; // Print two identical tickets
         printArea.classList.remove('d-none');
         window.print();
     }

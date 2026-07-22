@@ -203,6 +203,10 @@ body {
 
 /* Print Specific Rules */
 @media print {
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
     body {
         background-color: #ffffff !important;
     }
@@ -218,10 +222,23 @@ body {
         margin: 0;
         padding: 0;
     }
+    #printArea * {
+        color: #000000 !important;
+    }
     #printArea .ticket-card {
-        border: 2px solid #334155;
+        border: 2px dashed #000 !important;
         box-shadow: none !important;
         max-width: 100% !important;
-        margin: 0 !important;
+        margin: 0 0 15mm 0 !important;
+        page-break-inside: avoid;
+    }
+    #printArea .ticket-route-banner {
+        background: none !important;
+        border: 2px solid #000 !important;
+    }
+    #printArea .badge {
+        background: none !important;
+        border: 1px solid #000 !important;
+        color: #000 !important;
     }
 }
