@@ -614,7 +614,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <!-- Footer Terms -->
                 <div class="text-center text-muted small pt-2 border-top">
-                    <div><i class="bi bi-info-circle me-1"></i>Please report at pickup point 15 minutes prior to departure. Carry a valid photo ID. NON-REFUNDABLE.</div>
+                    <div><i class="bi bi-info-circle me-1"></i>Please report at pickup point 15 minutes prior to departure. Carry a valid photo ID.</div>
+                    <div class="fw-bold text-dark mt-1" style="font-weight: 800 !important; letter-spacing: 0.5px;">NON-REFUNDABLE</div>
                 </div>
             </div>
         `;
