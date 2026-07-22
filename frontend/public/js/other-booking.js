@@ -625,8 +625,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showAlert('Please select or create a booking to print.', 'warning');
             return;
         }
-        const ticketHtml = generateTicketHtml(b);
-        printArea.innerHTML = ticketHtml + ticketHtml; // Print two identical tickets
+        printArea.innerHTML = generateTicketHtml(b); // Print single ticket
         printArea.classList.remove('d-none');
         window.print();
     }
