@@ -233,9 +233,9 @@ body {
     #printArea .ticket-card {
         border: 2px dashed #000 !important;
         box-shadow: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 0 5mm 0 !important;
+        width: 50% !important;
+        max-width: 50% !important;
+        margin: 0 auto 5mm auto !important;
         padding: 8px !important;
         page-break-inside: avoid;
         page-break-after: auto;
