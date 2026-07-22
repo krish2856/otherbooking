@@ -210,11 +210,11 @@ body {
     padding: 16px;
 }
 
-/* Print Specific Rules */
+/* Print Specific Rules (Exact 148mm x 210mm A5 Portrait) */
 @media print {
     @page {
-        size: A5 portrait;
-        margin: 5mm;
+        size: 148mm 210mm;
+        margin: 4mm;
     }
 
     body {
@@ -229,7 +229,7 @@ body {
         display: block !important;
         position: relative !important;
         width: 100% !important;
-        margin: 0 !important;
+        margin: 0 auto !important;
         padding: 0 !important;
         box-sizing: border-box !important;
     }
@@ -239,13 +239,25 @@ body {
         box-sizing: border-box !important;
     }
 
+    #printArea .row {
+        --bs-gutter-x: 4px !important;
+        --bs-gutter-y: 4px !important;
+        margin-left: -2px !important;
+        margin-right: -2px !important;
+    }
+
+    #printArea .row > * {
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+    }
+
     #printArea .ticket-card {
         border: 2px dashed #000 !important;
         box-shadow: none !important;
         width: 100% !important;
         max-width: 100% !important;
         margin: 0 auto !important;
-        padding: 10px !important;
+        padding: 8px !important;
         page-break-inside: avoid;
         page-break-after: auto;
     }
@@ -262,7 +274,7 @@ body {
     }
 
     #printArea .ticket-label {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
     }
 
     #printArea .mb-4,
@@ -279,25 +291,26 @@ body {
     }
 
     #printArea .fs-4 {
-        font-size: 1.05rem !important;
+        font-size: 1rem !important;
     }
 
     #printArea .ticket-header-title {
-        font-size: 1.5rem !important;
+        font-size: 1.4rem !important;
     }
 
     #printArea .ticket-header-title i {
-        font-size: 1.8rem !important;
+        font-size: 1.6rem !important;
     }
 
     #printArea .ticket-val {
-        font-size: 0.82rem !important;
+        font-size: 0.78rem !important;
+        word-break: break-word !important;
     }
 
     #printArea .ticket-route-banner {
         background: none !important;
         border: 2px solid #000 !important;
-        padding: 8px 12px !important;
+        padding: 6px 10px !important;
     }
 
     #printArea .badge {
