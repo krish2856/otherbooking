@@ -228,15 +228,21 @@ body {
     #printArea .ticket-card {
         border: 2px dashed #000 !important;
         box-shadow: none !important;
+        width: 100% !important;
         max-width: 100% !important;
         margin: 0 0 5mm 0 !important;
-        padding: 10px !important;
+        padding: 8px !important;
         page-break-inside: avoid;
         page-break-after: auto;
     }
     #printArea .ticket-field {
-        padding: 2px 6px !important;
+        border: 1.5px solid #000 !important;
+        padding: 2px 4px !important;
         margin-bottom: 2px !important;
+    }
+    #printArea .ticket-fare-summary {
+        border: 2px solid #000 !important;
+        padding: 4px !important;
     }
     #printArea .mb-4, #printArea .mb-3 {
         margin-bottom: 4px !important;
