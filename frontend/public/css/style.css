@@ -235,8 +235,12 @@ body {
         box-shadow: none !important;
         width: 50% !important;
         max-width: 50% !important;
+        min-height: 90vh !important;
         margin: 0 auto 5mm auto !important;
-        padding: 8px !important;
+        padding: 12px 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
         page-break-inside: avoid;
         page-break-after: auto;
     }
