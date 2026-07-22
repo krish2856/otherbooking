@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const due = Math.max(net - paid, 0);
 
         document.getElementById('net_amount').value = net.toFixed(2);
-        document.getElementById('due_amount').value = due.toFixed(2);
     }
     calcFields.forEach(el => el.addEventListener('input', recalcAmounts));
 
@@ -122,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('gst').value = 0;
         document.getElementById('paid_amount').value = 0;
         document.getElementById('net_amount').value = '0.00';
-        document.getElementById('due_amount').value = '0.00';
         mobileError.classList.add('d-none');
         btnSave.disabled = false;
 
@@ -160,14 +158,13 @@ document.addEventListener('DOMContentLoaded', function () {
             from_place: document.getElementById('from_place').value.trim(),
             to_place: document.getElementById('to_place').value.trim(),
             operator: document.getElementById('operator').value.trim(),
-            coach: document.getElementById('coach').value.trim(),
             journey_time: document.getElementById('journey_time').value,
             passenger_name: document.getElementById('passenger_name').value.trim(),
             passenger_mobile: document.getElementById('passenger_mobile').value.trim(),
             passenger_gender: document.getElementById('passenger_gender').value,
-            passenger_age: document.getElementById('passenger_age').value,
             seat_type: document.getElementById('seat_type').value,
             seat_number: document.getElementById('seat_number').value.trim(),
+            total_seat: document.getElementById('total_seat').value,
             pickup_point: document.getElementById('pickup_point').value.trim(),
             drop_point: document.getElementById('drop_point').value.trim(),
             fare: document.getElementById('fare').value,
@@ -190,16 +187,15 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('from_place').value = b.from_place || '';
         document.getElementById('to_place').value = b.to_place || '';
         document.getElementById('operator').value = b.operator || '';
-        document.getElementById('coach').value = b.coach || '';
         document.getElementById('journey_time').value = b.journey_time || '';
 
         document.getElementById('passenger_name').value = b.passenger_name || '';
         document.getElementById('passenger_mobile').value = b.passenger_mobile || '';
         document.getElementById('passenger_gender').value = b.passenger_gender || 'Male';
-        document.getElementById('passenger_age').value = b.passenger_age || '';
-        document.getElementById('seat_type').value = b.seat_type || 'Seater';
+        document.getElementById('seat_type').value = b.seat_type || 'A/C Sleeper';
 
         document.getElementById('seat_number').value = b.seat_number || '';
+        document.getElementById('total_seat').value = b.total_seat || '';
         document.getElementById('pickup_point').value = b.pickup_point || '';
         document.getElementById('drop_point').value = b.drop_point || '';
         document.getElementById('pnr').value = b.pnr || '';
@@ -526,15 +522,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                     <div class="col-4">
                         <div class="ticket-field">
-                            <span class="ticket-label">Gender / Age</span>
-                            <span class="ticket-val">${escapeHtml(b.passenger_gender || 'Male')} / ${b.passenger_age || '-'}</span>
+                            <span class="ticket-label">Gender</span>
+                            <span class="ticket-val">${escapeHtml(b.passenger_gender || 'Male')}</span>
                         </div>
                     </div>
 
                     <div class="col-4">
                         <div class="ticket-field">
-                            <span class="ticket-label">Seat Number</span>
-                            <span class="ticket-val text-primary fw-bold">${escapeHtml(b.seat_number)} (${escapeHtml(b.seat_type || 'Seater')})</span>
+                            <span class="ticket-label">Seat Number (Total: ${b.total_seat || 1})</span>
+                            <span class="ticket-val text-primary fw-bold">${escapeHtml(b.seat_number)} (${escapeHtml(b.seat_type || 'A/C Sleeper')})</span>
                         </div>
                     </div>
                     <div class="col-4">
@@ -545,8 +541,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                     <div class="col-4">
                         <div class="ticket-field">
-                            <span class="ticket-label">Coach / Bus No</span>
-                            <span class="ticket-val">${escapeHtml(b.coach || '-')} ${b.bus_number ? '/ ' + escapeHtml(b.bus_number) : ''}</span>
+                            <span class="ticket-label">Bus No</span>
+                            <span class="ticket-val">${b.bus_number ? escapeHtml(b.bus_number) : '-'}</span>
                         </div>
                     </div>
 
@@ -588,10 +584,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="col">
                             <span class="ticket-label">Paid (${escapeHtml(b.payment_mode || 'Cash')})</span>
                             <span class="fw-bold text-success">₹${Number(b.paid_amount || 0).toFixed(2)}</span>
-                        </div>
-                        <div class="col">
-                            <span class="ticket-label">Due Amount</span>
-                            <span class="fw-bold text-danger">₹${Number(b.due_amount || 0).toFixed(2)}</span>
                         </div>
                     </div>
                 </div>

@@ -13,15 +13,15 @@ const OtherBookingModel = {
             INSERT INTO ${TABLE} (
                 ticket_no, booking_date, journey_date, from_place, to_place,
                 operator, coach, journey_time, passenger_name, passenger_mobile,
-                passenger_gender, passenger_age, seat_type, seat_number,
+                passenger_gender, passenger_age, seat_type, seat_number, total_seat,
                 pickup_point, drop_point, fare, discount, gst, net_amount,
                 paid_amount, due_amount, payment_mode, pnr, bus_number, remarks, booking_status
             ) VALUES (
                 $1, $2, $3, $4, $5,
                 $6, $7, $8, $9, $10,
-                $11, $12, $13, $14,
-                $15, $16, $17, $18, $19, $20,
-                $21, $22, $23, $24, $25, $26, $27
+                $11, $12, $13, $14, $15,
+                $16, $17, $18, $19, $20, $21,
+                $22, $23, $24, $25, $26, $27, $28
             ) RETURNING *
         `;
         const values = [
@@ -37,8 +37,9 @@ const OtherBookingModel = {
             data.passenger_mobile,
             data.passenger_gender || 'Male',
             data.passenger_age || null,
-            data.seat_type || 'Seater',
+            data.seat_type || 'A/C Sleeper',
             data.seat_number,
+            data.total_seat,
             data.pickup_point || null,
             data.drop_point || null,
             data.fare,
@@ -63,11 +64,11 @@ const OtherBookingModel = {
                 booking_date = $1, journey_date = $2, from_place = $3, to_place = $4,
                 operator = $5, coach = $6, journey_time = $7, passenger_name = $8,
                 passenger_mobile = $9, passenger_gender = $10, passenger_age = $11,
-                seat_type = $12, seat_number = $13, pickup_point = $14, drop_point = $15,
-                fare = $16, discount = $17, gst = $18, net_amount = $19, paid_amount = $20,
-                due_amount = $21, payment_mode = $22, pnr = $23, bus_number = $24,
-                remarks = $25, booking_status = $26, updated_at = CURRENT_TIMESTAMP
-            WHERE id = $27 RETURNING *
+                seat_type = $12, seat_number = $13, total_seat = $14, pickup_point = $15, drop_point = $16,
+                fare = $17, discount = $18, gst = $19, net_amount = $20, paid_amount = $21,
+                due_amount = $22, payment_mode = $23, pnr = $24, bus_number = $25,
+                remarks = $26, booking_status = $27, updated_at = CURRENT_TIMESTAMP
+            WHERE id = $28 RETURNING *
         `;
         const values = [
             data.booking_date,
@@ -81,8 +82,9 @@ const OtherBookingModel = {
             data.passenger_mobile,
             data.passenger_gender || 'Male',
             data.passenger_age || null,
-            data.seat_type || 'Seater',
+            data.seat_type || 'A/C Sleeper',
             data.seat_number,
+            data.total_seat,
             data.pickup_point || null,
             data.drop_point || null,
             data.fare,

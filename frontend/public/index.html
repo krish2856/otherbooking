@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Other Booking Management - Bus Reservation System</title>
+    <title>Other Booking Pro</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +16,7 @@
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
 </head>
+
 <body>
 
     <!-- Header -->
@@ -23,8 +25,8 @@
             <div class="d-flex align-items-center gap-3">
                 <i class="bi bi-bus-front fs-2 text-info"></i>
                 <div>
-                    <h1 class="h4 mb-0 fw-bold">Bus Reservation Management</h1>
-                    <small class="opacity-75">Other Booking Module</small>
+                    <h1 class="h4 mb-0 fw-bold">Otherbooking</h1>
+                    <small class="opacity-75">Booking Module</small>
                 </div>
             </div>
             <div>
@@ -63,7 +65,8 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">From <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="from_place" placeholder="e.g. Ahmedabad" required>
+                            <input type="text" class="form-control" id="from_place" placeholder="e.g. Ahmedabad"
+                                required>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">To <span class="text-danger">*</span></label>
@@ -72,21 +75,19 @@
                     </div>
 
                     <div class="row g-3 mb-3">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label">Operator <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="operator" placeholder="Travel Operator Name" required>
+                            <input type="text" class="form-control" id="operator" placeholder="Travel Operator Name"
+                                required>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Coach</label>
-                            <input type="text" class="form-control" id="coach" placeholder="e.g. Sleeper / AC">
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label">Journey Time</label>
                             <input type="time" class="form-control" id="journey_time">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label">Ticket Number</label>
-                            <input type="text" class="form-control fw-bold text-accent" id="ticket_no" placeholder="Auto-generated" readonly>
+                            <input type="text" class="form-control fw-bold text-accent" id="ticket_no"
+                                placeholder="Auto-generated" readonly>
                         </div>
                     </div>
 
@@ -95,14 +96,17 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-3">
                             <label class="form-label">Passenger Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="passenger_name" placeholder="Full Name" required>
+                            <input type="text" class="form-control" id="passenger_name" placeholder="Full Name"
+                                required>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
-                            <input type="tel" class="form-control" id="passenger_mobile" maxlength="10" placeholder="10-digit mobile number" required>
-                            <div class="form-text text-danger d-none" id="mobileError">Enter valid 10-digit mobile number.</div>
+                            <input type="tel" class="form-control" id="passenger_mobile" maxlength="10"
+                                placeholder="10-digit mobile number" required>
+                            <div class="form-text text-danger d-none" id="mobileError">Enter valid 10-digit mobile
+                                number.</div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label class="form-label">Gender</label>
                             <select class="form-select" id="passenger_gender">
                                 <option value="Male">Male</option>
@@ -110,16 +114,11 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Age</label>
-                            <input type="number" class="form-control" id="passenger_age" min="1" max="120" placeholder="Age">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Seat Type</label>
+                        <div class="col-md-3">
+                            <label class="form-label">Sleeper Type</label>
                             <select class="form-select" id="seat_type">
-                                <option value="Seater">Seater</option>
-                                <option value="Sleeper">Sleeper</option>
-                                <option value="Semi-Sleeper">Semi-Sleeper</option>
+                                <option value="A/C Sleeper">A/C Sleeper</option>
+                                <option value="Non A/C Sleeper">Non A/C Sleeper</option>
                             </select>
                         </div>
                     </div>
@@ -127,48 +126,54 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-3">
                             <label class="form-label">Seat Number <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="seat_number" placeholder="e.g. L12 or 15" required>
+                            <input type="text" class="form-control" id="seat_number" placeholder="e.g. L12 or 15"
+                                required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Total Seat <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="total_seat" placeholder="e.g. 2" required>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Pickup Point</label>
                             <input type="text" class="form-control" id="pickup_point" placeholder="Pickup location">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">Drop Point</label>
                             <input type="text" class="form-control" id="drop_point" placeholder="Drop location">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">PNR</label>
                             <input type="text" class="form-control" id="pnr" placeholder="Optional PNR">
                         </div>
                     </div>
 
                     <!-- Section: Payment & Fare -->
-                    <div class="form-section-title"><i class="bi bi-currency-rupee me-1"></i>Fare & Payment Details</div>
+                    <div class="form-section-title"><i class="bi bi-currency-rupee me-1"></i>Fare & Payment Details
+                    </div>
                     <div class="row g-3 mb-3">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label class="form-label">Fare (₹) <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control calc-field" id="fare" min="0" step="0.01" placeholder="0.00" required>
+                            <input type="number" class="form-control calc-field" id="fare" min="0" step="0.01"
+                                placeholder="0.00" required>
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">Discount (₹)</label>
-                            <input type="number" class="form-control calc-field" id="discount" min="0" step="0.01" value="0">
+                            <input type="number" class="form-control calc-field" id="discount" min="0" step="0.01"
+                                value="0">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">GST (₹)</label>
                             <input type="number" class="form-control calc-field" id="gst" min="0" step="0.01" value="0">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label class="form-label">Net Amount (₹)</label>
-                            <input type="text" class="form-control fw-bold bg-light" id="net_amount" value="0.00" readonly>
+                            <input type="text" class="form-control fw-bold bg-light" id="net_amount" value="0.00"
+                                readonly>
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">Paid Amount (₹)</label>
-                            <input type="number" class="form-control calc-field" id="paid_amount" min="0" step="0.01" value="0">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Due Amount (₹)</label>
-                            <input type="text" class="form-control fw-bold text-danger bg-light" id="due_amount" value="0.00" readonly>
+                            <input type="number" class="form-control calc-field" id="paid_amount" min="0" step="0.01"
+                                value="0">
                         </div>
                     </div>
 
@@ -202,14 +207,21 @@
 
                     <!-- Action Buttons -->
                     <div class="d-flex flex-wrap gap-2 mt-4">
-                        <button type="button" class="btn btn-outline-secondary" id="btnNew"><i class="bi bi-file-earmark-plus me-1"></i>New</button>
-                        <button type="submit" class="btn btn-accent" id="btnSave"><i class="bi bi-save me-1"></i>Save</button>
-                        <button type="button" class="btn btn-warning text-white" id="btnUpdate"><i class="bi bi-arrow-repeat me-1"></i>Update</button>
-                        <button type="button" class="btn btn-danger" id="btnDelete"><i class="bi bi-trash me-1"></i>Delete</button>
-                        <button type="button" class="btn btn-outline-dark" id="btnClear"><i class="bi bi-eraser me-1"></i>Clear</button>
+                        <button type="button" class="btn btn-outline-secondary" id="btnNew"><i
+                                class="bi bi-file-earmark-plus me-1"></i>New</button>
+                        <button type="submit" class="btn btn-accent" id="btnSave"><i
+                                class="bi bi-save me-1"></i>Save</button>
+                        <button type="button" class="btn btn-warning text-white" id="btnUpdate"><i
+                                class="bi bi-arrow-repeat me-1"></i>Update</button>
+                        <button type="button" class="btn btn-danger" id="btnDelete"><i
+                                class="bi bi-trash me-1"></i>Delete</button>
+                        <button type="button" class="btn btn-outline-dark" id="btnClear"><i
+                                class="bi bi-eraser me-1"></i>Clear</button>
                         <div class="vr d-none d-md-block mx-1"></div>
-                        <button type="button" class="btn btn-outline-primary" id="btnPrint"><i class="bi bi-printer me-1"></i>Print Ticket</button>
-                        <button type="button" class="btn btn-outline-success" id="btnPdf"><i class="bi bi-file-earmark-pdf me-1"></i>Download PDF</button>
+                        <button type="button" class="btn btn-outline-primary" id="btnPrint"><i
+                                class="bi bi-printer me-1"></i>Print Ticket</button>
+                        <button type="button" class="btn btn-outline-success" id="btnPdf"><i
+                                class="bi bi-file-earmark-pdf me-1"></i>Download PDF</button>
                     </div>
                 </form>
             </div>
@@ -234,12 +246,15 @@
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">Keyword</label>
-                        <input type="text" class="form-control" id="searchKeyword" placeholder="Enter keyword to search...">
+                        <input type="text" class="form-control" id="searchKeyword"
+                            placeholder="Enter keyword to search...">
                         <input type="date" class="form-control d-none" id="searchKeywordDate">
                     </div>
                     <div class="col-md-4 d-flex gap-2">
-                        <button class="btn btn-accent w-100" id="btnSearch"><i class="bi bi-search me-1"></i>Search</button>
-                        <button class="btn btn-outline-secondary w-100" id="btnResetSearch"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
+                        <button class="btn btn-accent w-100" id="btnSearch"><i
+                                class="bi bi-search me-1"></i>Search</button>
+                        <button class="btn btn-outline-secondary w-100" id="btnResetSearch"><i
+                                class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
                     </div>
                 </div>
             </div>
@@ -290,4 +305,5 @@
     <!-- Application Logic -->
     <script src="js/other-booking.js"></script>
 </body>
+
 </html>
