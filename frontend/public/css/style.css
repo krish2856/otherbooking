@@ -214,7 +214,7 @@ body {
 @media print {
     @page {
         size: 148mm 210mm;
-        margin: 4mm;
+        margin: 5mm 8mm;
     }
 
     body {
@@ -254,8 +254,8 @@ body {
     #printArea .ticket-card {
         border: 2px dashed #000 !important;
         box-shadow: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
+        width: 96% !important;
+        max-width: 96% !important;
         margin: 0 auto !important;
         padding: 16px !important;
         page-break-inside: avoid;
