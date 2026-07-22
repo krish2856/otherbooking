@@ -245,6 +245,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             showAlert(`Booking saved successfully! Ticket No: <b>${json.data.ticket_no}</b>`, 'success');
+            
+            const shareCheck = document.getElementById('shareWhatsapp');
+            if (shareCheck && shareCheck.checked) {
+                try {
+                    showAlert('Generating PDF for WhatsApp...', 'info');
+                    const blob = await generateTicketPdfBlob(json.data);
+                    await shareOnWhatsApp(json.data, blob);
+                } catch (e) {
+                    console.error('WhatsApp share error', e);
+                }
+            }
+
             await loadAllBookings();
             await setNewMode();
         } catch (err) {
@@ -283,6 +295,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             showAlert(`Booking <b>#${json.data.ticket_no}</b> updated successfully!`, 'success');
+            
+            const shareCheck = document.getElementById('shareWhatsapp');
+            if (shareCheck && shareCheck.checked) {
+                try {
+                    showAlert('Generating PDF for WhatsApp...', 'info');
+                    const blob = await generateTicketPdfBlob(json.data);
+                    await shareOnWhatsApp(json.data, blob);
+                } catch (e) {
+                    console.error('WhatsApp share error', e);
+                }
+            }
+
             await loadAllBookings();
             populateForm(json.data);
         } catch (err) {
@@ -621,6 +645,54 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    async function generateTicketPdfBlob(b) {
+        printArea.innerHTML = generateTicketHtml(b);
+        printArea.classList.remove('d-none');
+
+        const ticketCard = printArea.querySelector('.ticket-card');
+        const canvas = await html2canvas(ticketCard, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'pt', [canvas.width / 2, canvas.height / 2]);
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+        
+        printArea.classList.add('d-none');
+        return pdf.output('blob');
+    }
+
+    async function shareOnWhatsApp(b, pdfBlob) {
+        const file = new File([pdfBlob], `Ticket_${b.ticket_no || 'Booking'}.pdf`, { type: 'application/pdf' });
+        const textMsg = `Hello ${b.passenger_name},\nHere is your ticket for ${b.from_place} to ${b.to_place}.\nTicket No: ${b.ticket_no}`;
+        
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({
+                    files: [file],
+                    title: 'Ticket PDF',
+                    text: textMsg
+                });
+                return;
+            } catch (err) {
+                console.log('Share canceled or failed natively', err);
+            }
+        }
+        
+        // Fallback: Download and open WA Web
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        const phone = b.passenger_mobile ? `91${b.passenger_mobile.replace(/\D/g, '')}` : '';
+        const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(textMsg + "\n\n(Please attach the downloaded PDF)")}`;
+        window.open(waUrl, '_blank');
+    }
+
     btnPdf.addEventListener('click', async function () {
         const b = currentBookingData || (form.checkValidity() ? { ...collectFormData(), ticket_no: ticketNoField.value || 'OB-Draft' } : null);
         if (!b) {
@@ -630,24 +702,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             showAlert('Generating Ticket PDF...', 'info');
-            printArea.innerHTML = generateTicketHtml(b);
-            printArea.classList.remove('d-none');
-
-            const ticketCard = printArea.querySelector('.ticket-card');
-            const canvas = await html2canvas(ticketCard, { scale: 2 });
-            const imgData = canvas.toDataURL('image/png');
-
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'pt', [canvas.width / 2, canvas.height / 2]);
-            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
-            pdf.save(`Ticket_${b.ticket_no || 'Booking'}.pdf`);
+            const blob = await generateTicketPdfBlob(b);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Ticket_${b.ticket_no || 'Booking'}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
 
             showAlert('Ticket PDF downloaded successfully!', 'success');
         } catch (err) {
             console.error(err);
             showAlert('Failed to generate PDF.', 'danger');
-        } finally {
-            printArea.classList.add('d-none');
         }
     });
 
